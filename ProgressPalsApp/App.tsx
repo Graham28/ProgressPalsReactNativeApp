@@ -1,9 +1,26 @@
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import MainNavigator from './src/navigation/MainNavigator';
+import { enableScreens } from 'react-native-screens';
+
+enableScreens();
+
+function App(): JSX.Element {
+  return (
+    <NavigationContainer>
+      <MainNavigator />
+    </NavigationContainer>
+  );
+}
+
+export default App;
+
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
  *
  * @format
- */
+ 
 
 import React from 'react';
 import type {PropsWithChildren} from 'react';
@@ -28,6 +45,8 @@ import {
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
+import { useEffect, useState } from 'react';
+import axios from 'axios';  
 
 function Section({children, title}: SectionProps): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -61,7 +80,20 @@ function App(): JSX.Element {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+  // State to hold our fetched data
+  const [apiData, setApiData] = useState<string | null>(null);
 
+  useEffect(() => {
+    // Fetch data from your local .NET API using Axios
+    //axios.get('http://10.0.2.2:5243/Test')  // For Android emulator
+     axios.get('http://localhost:5243/Test')  // For iOS simulator
+      .then((response) => {
+        setApiData(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching data", error);
+      });
+  }, []);
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -76,6 +108,10 @@ function App(): JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+
+          <Section title="API Data">
+            {apiData ? apiData : "Fetching data..."}
+          </Section>
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
             screen and then come back to see your edits.
@@ -116,3 +152,4 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+*/
