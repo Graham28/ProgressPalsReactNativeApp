@@ -1,5 +1,5 @@
 // src/screens/Login.tsx
-
+import { loginUser } from '../api/userAPI';
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
@@ -7,8 +7,20 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
-        // Handle your login logic here
+    const handleLogin = async () => {
+        try {
+            const response = await loginUser(email, password);
+            if (response.token) {
+                console.log("Logged in successfully with token:", response.token);
+                // You may want to navigate the user to a dashboard or save the token to AsyncStorage etc.
+            } else if (response.message) {
+                console.error(response.message);  // handle incorrect username/password
+            } else {
+                console.error("Unexpected response from the server.");
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
     };
 
     return (
