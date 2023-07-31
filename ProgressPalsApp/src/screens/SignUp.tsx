@@ -1,28 +1,52 @@
 // src/screens/SignUp.tsx
 
-import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, Button, StyleSheet,  Modal, TouchableOpacity} from 'react-native';
+import { registerUser } from '../api/userAPI';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+
+type Gender = 0 | 1 | 2 | undefined;
 
 function SignUp() {
-    type Gender = 'male' | 'female' | 'other' | null;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [gender, setGender] = useState<Gender>(null);
+    const [gender, setGender] = useState<Gender>(undefined);
     const [name, setName] = useState('');
     const [birthdate, setBirthdate] = useState('');
     const [displayUsername, setDisplayUsername] = useState('');
     const [isGenderPickerVisible, setIsGenderPickerVisible] = useState(false);
-    
-    const openGenderPicker = () => {
-        setIsGenderPickerVisible(true);
-    };
+
+    const openGenderPicker = () => setIsGenderPickerVisible(true);
 
     const selectGender = (value: Gender) => {
         setGender(value);
         setIsGenderPickerVisible(false);
     };
-    const handleSignUp = () => {
-        // Handle your sign up logic here
+
+    const getGenderText = (gender: Gender) => {
+        switch (gender) {
+            case 0: return 'Male';
+            case 1: return 'Female';
+            case 2: return 'Other';
+            default: return 'Select Gender';
+        }
+    };
+
+    const handleSignUp = async () => {
+        try {
+            const user = { 
+                email, 
+                password,
+                name,
+                birthdate,
+                displayUsername,
+                gender,
+            };
+
+            const response = await registerUser(user);
+            console.log(response); // or handle the response as needed
+        } catch (error) {
+            console.error('Error registering:', error);
+        }
     };
 
     return (
@@ -42,28 +66,26 @@ function SignUp() {
                 style={styles.input}
             />
             <TouchableOpacity onPress={openGenderPicker} style={styles.input}>
-                <Text>{gender || "Select Gender"}</Text>
+                <Text>{getGenderText(gender)}</Text>
             </TouchableOpacity>
-            
             <Modal
                 visible={isGenderPickerVisible}
                 transparent={true}
                 animationType="slide"
             >
                 <View style={styles.modalContainer}>
-                    <TouchableOpacity onPress={() => selectGender('male')}>
+                    <TouchableOpacity onPress={() => selectGender(0)}>
                         <Text>Male</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => selectGender('female')}>
+                    <TouchableOpacity onPress={() => selectGender(1)}>
                         <Text>Female</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => selectGender('other')}>
+                    <TouchableOpacity onPress={() => selectGender(2)}>
                         <Text>Other</Text>
                     </TouchableOpacity>
                     <Button title="Cancel" onPress={() => setIsGenderPickerVisible(false)} />
                 </View>
             </Modal>
-
             <TextInput
                 placeholder="Name"
                 value={name}
