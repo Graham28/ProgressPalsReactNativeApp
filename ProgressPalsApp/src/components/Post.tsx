@@ -1,14 +1,43 @@
 // src/components/Post.tsx
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 type PostProps = {
     content: string;
     username?: string; 
     timestamp?: string;
+    imageUrl?: string;
 };
 
+type EmojiLinks = {
+    [key: string]: string;
+};
+
+type EmojiKey = 'strong' | 'clap' | 'fire' | 'thinking';
+
+const outlineEmojiLinks = {
+    strong: 'https://static-00.iconduck.com/assets.00/flexed-biceps-emoji-475x512-9lifvcz8.png',
+    clap: 'https://image.emojipng.com/183/416183-small.png',
+    fire: 'https://www.vhv.rs/dpng/d/421-4212217_clipart-flames-outline-clipart-flames-outline-transparent-flame.png',
+    thinking: 'https://cdn3.iconfinder.com/data/icons/smileys-people-smiley-essential/48/v-35-512.png'
+};
+
+const colorfulEmojiLinks = {
+    strong: 'https://image.emojipng.com/498/172498-small.png',
+    clap: 'https://image.emojipng.com/462/12436462-small.png',
+    fire: 'https://image.emojipng.com/401/46401-small.png',
+    thinking: 'https://image.emojipng.com/774/1774-small.png'
+};
+
+
 const Post: React.FC<PostProps> = ({ content, username = 'Anonymous', timestamp = '', imageUrl }) => {
+    const [activeEmojis, setActiveEmojis] = useState<Record<string, boolean>>({});
+    const toggleEmoji = (emojiKey: string) => {
+        setActiveEmojis(prev => ({
+            ...prev,
+            [emojiKey]: !prev[emojiKey]
+        }));
+    };
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -29,22 +58,26 @@ const Post: React.FC<PostProps> = ({ content, username = 'Anonymous', timestamp 
                     source={{ uri: imageUrl }}  
                 />
             )}
+            
             <View style={styles.actions}>
-                <TouchableOpacity style={styles.actionButton}>
-                    <Text style={styles.actionText}>Like</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
-                    <Text style={styles.actionText}>Comment</Text>
-                </TouchableOpacity>
+                {Object.keys(outlineEmojiLinks).map((key) => {
+                    const emojiKey = key as EmojiKey;
+                    return (
+                        <TouchableOpacity key={emojiKey} style={styles.emojiButton} onPress={() => toggleEmoji(emojiKey)}>
+                            <Image source={{ uri: activeEmojis[emojiKey] ? colorfulEmojiLinks[emojiKey] : outlineEmojiLinks[emojiKey] }} style={styles.emojiImage} />
+                        </TouchableOpacity>
+                    );
+                })}
             </View>
         </View>
     );
 }
+
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
         padding: 12,
-        marginVertical: 3,  // Reduced space between posts
+        marginVertical: 3,
     },
     header: {
         flexDirection: 'row',
@@ -54,7 +87,7 @@ const styles = StyleSheet.create({
     profileImage: {
         width: 30, 
         height: 30,
-        borderRadius: 15,  // Adjusted to half of the width/height
+        borderRadius: 15,
         marginRight: 5,
     },
     headerText: {
@@ -80,17 +113,16 @@ const styles = StyleSheet.create({
     },
     actions: {
         flexDirection: 'row',
-        paddingTop: 2,  // Reduced space above the action buttons
+        paddingTop: 2,
         justifyContent: 'space-between',
     },
-    actionButton: {
-        padding: 0,  // Reduced padding for the action buttons
+    emojiButton: {
+        marginHorizontal: 5,
     },
-    actionText: {
-        fontSize: 14,
-        color: '#333',
+    emojiImage: {
+        width: 15,
+        height: 17,
     },
 });
-
 
 export default Post;
