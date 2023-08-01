@@ -1,18 +1,38 @@
 // src/screens/Login.tsx
 import { loginUser } from '../api/userAPI';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-function Login() {
+type RootStackParamList = {
+  Login: undefined;
+  PrivatePage: undefined;  // add other screens as necessary
+};
+
+type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
+
+const Login = ({ navigation }: { navigation: LoginScreenNavigationProp }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const authContext = useContext(AuthContext);
+
+    if (!authContext) {
+        throw new Error('Login must be used within an AuthProvider');
+    }
+
+    const { setAuth } = authContext;
 
     const handleLogin = async () => {
         try {
             const response = await loginUser(email, password);
             if (response.token) {
                 console.log("Logged in successfully with token:", response.token);
-                // You may want to navigate the user to a dashboard or save the token to AsyncStorage etc.
+                setAuth(true, {
+                    UserIdentifier: response.UserIdentifier,
+                    Token: response.Token
+                });  // Set the user as authenticated and save details
+                navigation.navigate('PrivatePage');
             } else if (response.message) {
                 console.error(response.message);  // handle incorrect username/password
             } else {

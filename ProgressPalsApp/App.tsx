@@ -2,18 +2,22 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './src/navigation/MainNavigator';
 import { enableScreens } from 'react-native-screens';
+import { AuthProvider } from './src/context/AuthContext';
 
 enableScreens();
 
 function App(): JSX.Element {
   return (
-    <NavigationContainer>
-      <MainNavigator />
-    </NavigationContainer>
+    <AuthProvider>
+      <NavigationContainer>
+        <MainNavigator />
+      </NavigationContainer>
+    </AuthProvider>
   );
 }
 
 export default App;
+
 
 /**
  * Sample React Native App
