@@ -44,12 +44,12 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
         padding: 12,
-        marginVertical: 4,  // Reduced space between posts
+        marginVertical: 3,  // Reduced space between posts
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 8,
+        marginBottom: 0,
     },
     profileImage: {
         width: 30, 
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        marginVertical: 10,
+        marginVertical: 6,
     },
     contentImage: { 
         width: '100%',
