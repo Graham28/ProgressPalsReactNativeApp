@@ -1,7 +1,9 @@
 // src/screens/Profile.tsx
 import Post from '../components/Post'; 
+
 import React, { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import Streak, { StreakProps } from '../components/Streak';
 import { ScrollView, Text, Image, Button, StyleSheet } from 'react-native';
 
 const samplePosts = [
@@ -10,11 +12,20 @@ const samplePosts = [
         content: 'This is my first post!', 
         imageUrl: 'https://cdn.sanity.io/images/dm4o0ui7/production/020932a6ddb00f27b114b5f9b9d390e7f25d345c-1080x540.png?w=900&h=450&auto=format' 
     },
-    { id: '2', content: 'Progress update: Doing great today.' },
+    { 
+        id: '2', 
+        content: 'Got the steps in again today 💪',
+        streak: {
+            title: "10,000 steps a day.",
+            unit: "days",
+            streakLength: 28
+        }
+    },
     { 
         id: '3', 
         content: 'Progress update: Doing great today too.', 
         imageUrl: 'https://cdn.sanity.io/images/dm4o0ui7/production/020932a6ddb00f27b114b5f9b9d390e7f25d345c-1080x540.png?w=900&h=450&auto=format' },
+    
 ];
 
 const Profile = () => {
@@ -35,7 +46,7 @@ const Profile = () => {
             <Text style={styles.username}>{loginDetails?.UserIdentifier || 'Username'}</Text>
             <Button title="Edit" onPress={() => { /* Edit functionality */ }} />
             {samplePosts.map(post => (
-                <Post key={post.id} content={post.content} imageUrl={post.imageUrl} />
+                <Post key={post.id} {...post} />
             ))}
         </ScrollView>
     );
