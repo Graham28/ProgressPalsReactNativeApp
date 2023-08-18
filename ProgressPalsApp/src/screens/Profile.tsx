@@ -9,8 +9,12 @@ import { ScrollView, Text, Image, Button, StyleSheet } from 'react-native';
 const samplePosts = [
     { 
         id: '1', 
-        content: 'This is my first post!', 
-        imageUrl: 'https://cdn.sanity.io/images/dm4o0ui7/production/020932a6ddb00f27b114b5f9b9d390e7f25d345c-1080x540.png?w=900&h=450&auto=format' 
+        content: 'My workout progress this week', 
+        metric: {
+            title: "Bench press",
+            data: [50, 55, 57, 57, 60, 60, 62.5],
+            dates: ['01/08/2023', '02/08/2023', '03/08/2023', '04/08/2023', '05/08/2023', '06/08/2023', '07/08/2023']
+        } 
     },
     { 
         id: '2', 
@@ -18,7 +22,7 @@ const samplePosts = [
         streak: {
             title: "10,000 steps a day.",
             unit: "days",
-            streakLength: 28
+            streakLength: 31
         }
     },
     { 

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Streak, { StreakProps } from './Streak';
+import Metric, { MetricProps } from './Metric'; 
 
 type PostProps = {
     content: string;
@@ -9,6 +10,7 @@ type PostProps = {
     timestamp?: string;
     imageUrl?: string;
     streak?: StreakProps; // Using the exported StreakProps here
+    metric?: MetricProps;
 };
 
 type EmojiLinks = {
@@ -32,7 +34,7 @@ const colorfulEmojiLinks = {
 };
 
 
-const Post: React.FC<PostProps> = ({ content, username = 'Anonymous', timestamp = '', imageUrl, streak }) => {
+const Post: React.FC<PostProps> = ({ content, username = 'Anonymous', timestamp = '', imageUrl, streak, metric }) => {
 
     const [activeEmojis, setActiveEmojis] = useState<Record<string, boolean>>({});
     const toggleEmoji = (emojiKey: string) => {
@@ -55,6 +57,8 @@ const Post: React.FC<PostProps> = ({ content, username = 'Anonymous', timestamp 
             </View>
             <Text style={styles.text}>{content}</Text>
             {streak && <Streak {...streak} />}
+
+            {metric && <Metric {...metric} />}
 
             {imageUrl && ( // Render image only if imageUrl is provided
                 <Image 
