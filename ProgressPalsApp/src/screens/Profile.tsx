@@ -12,9 +12,15 @@ const samplePosts = [
         content: 'My workout progress this week', 
         metric: {
             title: "Bench press",
-            data: [50, 55, 57, 57, 60, 60, 62.5],
-            dates: ['01/08/2023', '02/08/2023', '03/08/2023', '04/08/2023', '05/08/2023', '06/08/2023', '07/08/2023']
-        } 
+            dataPoints: [
+                { date: '01/08/2023', value: 50 },
+                { date: '02/08/2023', value: 52.5 },
+                { date: '03/08/2023', value: 55 },
+                { date: '04/08/2023', value: 52.5 },
+                { date: '05/08/2023', value: 55 },
+                { date: '08/08/2023', value: 57 },
+            ]
+        }  
     },
     { 
         id: '2', 
