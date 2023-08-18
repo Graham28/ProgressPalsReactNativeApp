@@ -14,11 +14,12 @@ const samplePosts = [
             title: "Bench press",
             dataPoints: [
                 { date: '01/08/2023', value: 50 },
-                { date: '02/08/2023', value: 52.5 },
+                { date: '02/08/2023', value: 50 },
                 { date: '03/08/2023', value: 55 },
-                { date: '04/08/2023', value: 52.5 },
+                { date: '04/08/2023', value: 50 },
                 { date: '05/08/2023', value: 55 },
                 { date: '08/08/2023', value: 57 },
+                { date: '12/08/2023', value: 65 },
             ]
         }  
     },

@@ -1,8 +1,9 @@
 // src/components/Metric.tsx
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { LineChart, Grid, YAxis, XAxis } from 'react-native-svg-charts';
+import { LineChart, YAxis, XAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
+import { Circle, Text as SVGText } from 'react-native-svg';
 
 export type DataPoint = {
     date: string; // Date string in the format "DD/MM/YYYY"
@@ -13,7 +14,6 @@ export type MetricProps = {
     title: string;
     dataPoints: DataPoint[];
 };
-
 
 const Metric: React.FC<MetricProps> = ({ title, dataPoints }) => {
     const data = dataPoints.map(point => point.value);
@@ -26,21 +26,18 @@ const Metric: React.FC<MetricProps> = ({ title, dataPoints }) => {
     
     const minDate = Math.min(...parsedDates);
     const maxDate = Math.max(...parsedDates);
-
-    const rangeInDays = (maxDate - minDate) / (1000 * 60 * 60 * 24);
+    const rangeInDays = (maxDate - minDate) / (1000 * 60 * 60 * 24) + 2;
 
     // Create a new dataset based on the date range
     const newDataset: number[] = Array(Math.round(rangeInDays)).fill(null);
-
     parsedDates.forEach((date, index) => {
         const position = (date - minDate) / (1000 * 60 * 60 * 24);
         newDataset[Math.round(position)] = data[index];
     });
 
-    // Iterate over the newDataset and fill in gaps with interpolated values
+    // Fill in gaps with interpolated values
     let lastKnownValue = data[0]; 
     let lastKnownIndex = 0;
-
     for (let i = 0; i < newDataset.length; i++) {
         if (newDataset[i] !== null) {
             if (i - lastKnownIndex > 1) {
@@ -53,11 +50,46 @@ const Metric: React.FC<MetricProps> = ({ title, dataPoints }) => {
                     newDataset[lastKnownIndex + j] = lastKnownValue + dailyDifference * j;
                 }
             }
-
             lastKnownValue = newDataset[i];
             lastKnownIndex = i;
         }
     }
+
+    const calculateCY = (dataValue: number) => {
+        const chartHeight = 200;
+        const contentInsetTop = 31;
+        const contentInsetBottom = 47;
+        const normalizedData = (dataValue - (dataMin - padding)) / (dataMax + padding - (dataMin - padding));
+        const plottingHeight = chartHeight - contentInsetTop - contentInsetBottom;
+        return contentInsetTop + plottingHeight * (1 - normalizedData);
+    };
+
+    const Decorators = parsedDates.map((date, index) => {
+        const position = (date - minDate) / (1000 * 60 * 60 * 24);
+        const xPosition = (position / (newDataset.length - 1)) * 100 + '%';
+        const cy = calculateCY(newDataset[Math.round(position)]);
+        return (
+            <React.Fragment key={index}>
+                <Circle
+                    cx={xPosition}
+                    cy={cy}
+                    r={6}
+                    stroke={'black'}
+                    fill={'white'}
+                />
+                <SVGText
+                    x={xPosition}
+                    y={cy + 20} // positioning the text slightly below the circle
+                    dx={5} 
+                    fill="black"
+                    fontSize="10"
+                    textAnchor="middle"
+                >
+                    {data[index].toString()}
+                </SVGText>
+            </React.Fragment>
+        );
+    });
 
     const formatDateForXAxis = (index: number) => {
         const date = new Date(minDate + index * (1000 * 60 * 60 * 24));
@@ -69,26 +101,25 @@ const Metric: React.FC<MetricProps> = ({ title, dataPoints }) => {
             <Text style={metricStyles.title}>{title}</Text>
             <View style={{ flexDirection: 'row', height: 200 }}>
                 <YAxis
-                    data={newDataset}
+                    data={[dataMin - padding, dataMax + padding]}
                     contentInset={{ top: 20, bottom: 20 }}
                     svg={{
                         fill: 'grey',
                         fontSize: 10,
                     }}
-                    numberOfTicks={3}
-                    min={dataMin - padding}
-                    max={dataMax + padding}
+                    numberOfTicks={0}
                 />
                 <View style={{ flex: 1 }}>
                     <LineChart
                         style={metricStyles.chart}
                         data={newDataset}
-                        svg={{ stroke: 'rgb(23, 15, 28)', strokeWidth: 4 }}
+                        svg={{ stroke: 'rgb(23, 15, 28)', strokeWidth: 5 }}
                         contentInset={{ top: 30, bottom: 30 }}
                         curve={shape.curveLinear}
                         yMin={dataMin - padding}
                         yMax={dataMax + padding}
                     >
+                        {Decorators}
                     </LineChart>
                     <XAxis
                         style={{ marginTop: 5 }}
@@ -102,8 +133,6 @@ const Metric: React.FC<MetricProps> = ({ title, dataPoints }) => {
         </View>
     );
 };
-
-
 
 const metricStyles = StyleSheet.create({
     container: {
@@ -124,3 +153,4 @@ const metricStyles = StyleSheet.create({
 });
 
 export default Metric;
+
