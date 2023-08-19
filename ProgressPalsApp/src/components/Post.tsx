@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Streak, { StreakProps } from './Streak';
-import Metric, { MetricProps } from './Metric'; 
+import Metric, { MetricProps } from './Metric';
 
 type PostProps = {
     content: string;
@@ -34,7 +34,7 @@ const colorfulEmojiLinks = {
 };
 
 
-const Post: React.FC<PostProps> = ({ content, username = 'Anonymous', timestamp = '', imageUrl, streak, metric }) => {
+const Post: React.FC<PostProps> = ({ content, username = 'Graham Phillips', timestamp = '', imageUrl, streak, metric }) => {
 
     const [activeEmojis, setActiveEmojis] = useState<Record<string, boolean>>({});
     const toggleEmoji = (emojiKey: string) => {
@@ -46,9 +46,9 @@ const Post: React.FC<PostProps> = ({ content, username = 'Anonymous', timestamp 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Image 
+                <Image
                     style={styles.profileImage}
-                    source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png' }} 
+                    source={{ uri: 'https://avatars.githubusercontent.com/u/23019354?v=4' }}
                 />
                 <View style={styles.headerText}>
                     <Text style={styles.username}>{username}</Text>
@@ -61,12 +61,12 @@ const Post: React.FC<PostProps> = ({ content, username = 'Anonymous', timestamp 
             {metric && <Metric {...metric} />}
 
             {imageUrl && ( // Render image only if imageUrl is provided
-                <Image 
+                <Image
                     style={styles.contentImage}
-                    source={{ uri: imageUrl }}  
+                    source={{ uri: imageUrl }}
                 />
             )}
-            
+
             <View style={styles.actions}>
                 {Object.keys(outlineEmojiLinks).map((key) => {
                     const emojiKey = key as EmojiKey;
@@ -83,7 +83,7 @@ const Post: React.FC<PostProps> = ({ content, username = 'Anonymous', timestamp 
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
+        backgroundColor: '#fbfdff',
         padding: 12,
         marginVertical: 3,
     },
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         marginBottom: 0,
     },
     profileImage: {
-        width: 30, 
+        width: 30,
         height: 30,
         borderRadius: 15,
         marginRight: 5,
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     username: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: '#011831'
     },
     timestamp: {
         fontSize: 12,
@@ -112,8 +113,9 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         marginVertical: 6,
+        color: '#011831'
     },
-    contentImage: { 
+    contentImage: {
         width: '100%',
         height: 200,
         resizeMode: 'cover',

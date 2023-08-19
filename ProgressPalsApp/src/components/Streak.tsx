@@ -21,11 +21,13 @@ const Streak: React.FC<StreakProps> = ({ title, unit, streakLength }) => {
 
     return (
         <View style={streakStyles.container}>
-            <Text style={streakStyles.title}>{title}</Text>
-            <Text style={streakStyles.detail}>{streakLength} {unit}</Text>
+            <View>
+                <Text style={streakStyles.title}>{title}</Text>
+                <Text style={streakStyles.subtitle}>{`${streakLength} days of 7 ${unit} target`}</Text>
+            </View>
             <View style={streakStyles.progressBarContainer}>
                 <View style={[streakStyles.progressBar, { flex: progressBarFlexValue }]} />
-                <Text style={[streakStyles.progressEmoji, { left: `${calculateProgress() * 100}%` }]}>🔥</Text>
+                <Text style={[streakStyles.progressEmoji, { left: `${calculateProgress() * 100}%` }]}>🏃‍♀️</Text>
             </View>
         </View>
     );
@@ -41,7 +43,7 @@ const streakStyles = StyleSheet.create({
         paddingBottom: 40,   // More space for the progress bar
         marginTop: 15,
         marginBottom: 10,    // Some margin at the bottom so the shadow isn't cut off
-        backgroundColor: '#FFBE7B',  // Light background complementary to the gradient
+        backgroundColor: '#C5E6DB',  // Light background complementary to the gradient
 
         // Shadow properties for floating effect
         shadowColor: "#000",
@@ -56,11 +58,17 @@ const streakStyles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#ad5100',
+        color: '#112A46',
+    },
+    subtitle: {
+        fontSize: 16,
+        color: '#112A46',
+        marginTop: 5, // Give some space between the title and subtitle
+        fontWeight: '500',
     },
     detail: {
         fontSize: 22,
-        color: '#ad5100',
+        color: '#112A46',
         fontWeight: '600',
     },
     progressBarContainer: {
@@ -87,13 +95,13 @@ const streakStyles = StyleSheet.create({
     progressBar: {
         height: 10,
         borderRadius: 5,  
-        backgroundColor: '#EED971',
+        backgroundColor: '#112A46',
     },
     progressEmoji: {
         position: 'absolute',
-        bottom: -8,           
-        fontSize: 23,          
-        transform: [{ translateX: -15 }],
+        bottom: -11,           
+        fontSize: 30,          
+        transform: [{ translateX: -18 },{ scaleX: -1 }],
     },   
 });
 

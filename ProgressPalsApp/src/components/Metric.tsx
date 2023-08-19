@@ -68,33 +68,68 @@ const Metric: React.FC<MetricProps> = ({ title, dataPoints }) => {
         const position = (date - minDate) / (1000 * 60 * 60 * 24);
         const xPosition = (position / (newDataset.length - 1)) * 100 + '%';
         const cy = calculateCY(newDataset[Math.round(position)]);
-        return (
-            <React.Fragment key={index}>
-                <Circle
-                    cx={xPosition}
-                    cy={cy}
-                    r={6}
-                    stroke={'black'}
-                    fill={'white'}
-                />
-                <SVGText
-                    x={xPosition}
-                    y={cy + 20} // positioning the text slightly below the circle
-                    dx={5} 
-                    fill="black"
-                    fontSize="10"
-                    textAnchor="middle"
-                >
-                    {data[index].toString()}
-                </SVGText>
-            </React.Fragment>
-        );
+    
+        if (index === parsedDates.length - 1) {
+            // This is the last data point; we add the rocket emoji 🚀 instead of a circle
+            return (
+                <React.Fragment key={index}>
+                    <SVGText
+                        x={xPosition}
+                        y={cy}
+                        dy={5}  // Adjust as necessary to position the rocket in place of the circle
+                        fill="black"
+                        fontSize="22" // Adjust the font size for the rocket emoji
+                        textAnchor="middle"
+                    >
+                        🚀
+                    </SVGText>
+                    <SVGText
+                        x={xPosition}
+                        y={cy + 20} // positioning the text slightly below the circle
+                        fill="black"
+                        fontSize="10"
+                        textAnchor="middle"
+                    >
+                        {data[index].toString()}
+                    </SVGText>
+                </React.Fragment>
+            );
+        } else {
+            // This is not the last data point; we add a circle as before
+            return (
+                <React.Fragment key={index}>
+                    <Circle
+                        cx={xPosition}
+                        cy={cy}
+                        r={6}
+                        stroke={'#112A46'}
+                        fill={'#112A46'}
+                    />
+                    <SVGText
+                        x={xPosition}
+                        y={cy + 20} // positioning the text slightly below the circle
+                        dx = {5}
+                        fill="black"
+                        fontSize="10"
+                        textAnchor="middle"
+                    >
+                        {data[index].toString()}
+                    </SVGText>
+                </React.Fragment>
+            );
+        }
     });
+    
 
     const formatDateForXAxis = (index: number) => {
-        const date = new Date(minDate + index * (1000 * 60 * 60 * 24));
-        return `${date.getDate()}/${date.getMonth() + 1}`;
+        const date = parsedDates[index];
+        if (date) {
+            const dateObject = new Date(date);
+            return `${dateObject.getDate()}/${dateObject.getMonth() + 1}`;
+        }
+        return "";
     };
+    
 
     return (
         <View style={metricStyles.container}>
@@ -123,7 +158,7 @@ const Metric: React.FC<MetricProps> = ({ title, dataPoints }) => {
                     </LineChart>
                     <XAxis
                         style={{ marginTop: 5 }}
-                        data={newDataset}
+                        data={parsedDates}
                         formatLabel={formatDateForXAxis}
                         contentInset={{ left: 10, right: 10 }}
                         svg={{ fontSize: 10, fill: 'grey' }}
@@ -138,7 +173,7 @@ const metricStyles = StyleSheet.create({
     container: {
         padding: 10,
         marginVertical: 10,
-        backgroundColor: 'white',
+        backgroundColor: '#dcc5e6',
         borderRadius: 10,
         elevation: 2,
     },

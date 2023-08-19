@@ -9,17 +9,16 @@ import { ScrollView, Text, Image, Button, StyleSheet } from 'react-native';
 const samplePosts = [
     { 
         id: '1', 
-        content: 'My workout progress this week', 
+        content: 'My pushup progress', 
         metric: {
-            title: "Bench press",
+            title: "Max pushups",
             dataPoints: [
-                { date: '01/08/2023', value: 50 },
-                { date: '02/08/2023', value: 50 },
-                { date: '03/08/2023', value: 55 },
-                { date: '04/08/2023', value: 50 },
-                { date: '05/08/2023', value: 55 },
-                { date: '08/08/2023', value: 57 },
-                { date: '12/08/2023', value: 65 },
+                { date: '14/07/2023', value: 17 },
+                { date: '18/07/2023', value: 18 },
+                { date: '22/07/2023', value: 19 },
+                { date: '28/07/2023', value: 20 },
+                { date: '04/08/2023', value: 21 },
+                { date: '08/08/2023', value: 25 },
             ]
         }  
     },
@@ -27,9 +26,9 @@ const samplePosts = [
         id: '2', 
         content: 'Got the steps in again today 💪',
         streak: {
-            title: "10,000 steps a day.",
+            title: "30 minutes of working on app",
             unit: "days",
-            streakLength: 31
+            streakLength: 3
         }
     },
     { 
