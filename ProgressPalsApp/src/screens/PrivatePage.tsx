@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
+import StreakForm from '../components/StreakForm';
 
 function PrivatePage() {
   return (
     <View style={styles.container}>
-      <Text>This is a private page. Only logged-in users can see this.</Text>
+        <StreakForm />
     </View>
-  );
+);
 }
 
 const styles = StyleSheet.create({
