@@ -43,10 +43,10 @@ const Streak: React.FC<StreakProps> = ({ title, unit, streakLength }) => {
             </View>
             {canUpdate && (
                     <View style={streakStyles.buttonContainer}>
-                        <TouchableOpacity onPress={() => { /* Logic to end the streak can go here */ }}>
+                        <TouchableOpacity style={streakStyles.button} onPress={() => { /* Logic to end the streak can go here */ }}>
                             <Text style={streakStyles.buttonText}>Reset 🌱</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { /* Logic to add a day can go here */ }}>
+                        <TouchableOpacity style={streakStyles.button} onPress={() => { /* Logic to add a day can go here */ }}>
                             <Text style={streakStyles.buttonText}>Still going 💪</Text>
                         </TouchableOpacity>
                     </View>
@@ -61,7 +61,7 @@ const streakStyles = StyleSheet.create({
     container: {
         flexDirection: 'column',  // Changed to column
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         borderRadius: 10,    
         padding: 20,         
         paddingBottom: 15,   // Increased padding for buttons
@@ -129,13 +129,16 @@ const streakStyles = StyleSheet.create({
         marginTop: 13,
         paddingHorizontal: 0,  // Add some horizontal padding
     },
+    button: {
+        backgroundColor: '#112A46',  // A background for the buttons
+        borderRadius: 5,             // Rounded corners for the buttons
+        marginRight: 5,              // Spacing between the buttons
+    },
     buttonText: {
-        fontSize: 16, // Reduced size for clarity
+        fontSize: 16, 
         paddingHorizontal: 10,
         paddingVertical: 5,
-        backgroundColor: '#112A46',  // A background for the buttons
         color: 'white',              // White text for contrast
-        borderRadius: 5,             // Rounded corners for the buttons
     }
     
 });
