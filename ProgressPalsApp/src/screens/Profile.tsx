@@ -28,7 +28,7 @@ const samplePosts = [
         streak: {
             title: "30 minutes of working on app",
             unit: "days",
-            streakLength: 5
+            streakLength: 32
         }
     },
     { 

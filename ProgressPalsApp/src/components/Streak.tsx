@@ -14,12 +14,14 @@ const Streak: React.FC<StreakProps> = ({ title, unit, streakLength }) => {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    var target = 0;
 
     const canUpdate = isCurrentUser && today > lastUpdatedDate;
     const calculateProgress = () => {
-        const milestones = [3, 7, 31, 50, 100];
+        const milestones = [3, 7, 31, 50, 100, 182, 365];
         for (let milestone of milestones) {
             if (streakLength < milestone) {
+                target = milestone;
                 return streakLength / milestone;
             }
         }
@@ -33,7 +35,7 @@ const Streak: React.FC<StreakProps> = ({ title, unit, streakLength }) => {
         <View style={streakStyles.container}>
             <View>
                 <Text style={streakStyles.title}>{title}</Text>
-                <Text style={streakStyles.subtitle}>{`${streakLength} days of 7 ${unit} target`}</Text>
+                <Text style={streakStyles.subtitle}>{`${streakLength} days of ${target} day target`}</Text>
             </View>
             <View style={streakStyles.progressBarContainer}>
                 <View style={[streakStyles.progressBar, { flex: progressBarFlexValue }]} />
