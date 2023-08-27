@@ -1,6 +1,6 @@
 // src/components/Metric.tsx
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { LineChart, YAxis, XAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import { Circle, Text as SVGText } from 'react-native-svg';
@@ -129,6 +129,17 @@ const Metric: React.FC<MetricProps> = ({ title, dataPoints }) => {
         }
         return "";
     };
+
+    const [newValue, setNewValue] = useState<string>("");
+
+    const isCurrentUser = true;  // Dummy variable
+
+    // Placeholder function to handle new data submission (only logs it)
+    const handleSubmitData = () => {
+        console.log("New Data:", newValue);
+        setNewValue("");  // Reset the input field after submitting
+        // TODO: Your logic to send this to the backend
+    };
     
 
     return (
@@ -165,6 +176,20 @@ const Metric: React.FC<MetricProps> = ({ title, dataPoints }) => {
                     />
                 </View>
             </View>
+            {isCurrentUser && (
+                <View style={metricStyles.inputContainer}>
+                    <TextInput
+                        style={metricStyles.input}
+                        value={newValue}
+                        onChangeText={setNewValue}
+                        placeholder="Add new value"
+                        keyboardType="numeric"
+                    />
+                    <TouchableOpacity style={metricStyles.addButton} onPress={handleSubmitData}>
+                        <Text style={metricStyles.addButtonText}>Add Data</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
         </View>
     );
 };
@@ -184,7 +209,29 @@ const metricStyles = StyleSheet.create({
     },
     chart: {
         flex: 1,
-    }
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    input: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: '#112A46',
+        borderRadius: 5,
+        padding: 8,
+        marginRight: 10,
+    },
+    addButton: {
+        backgroundColor: '#112A46',
+        padding: 10,
+        borderRadius: 5,
+    },
+    addButtonText: {
+        color: 'white',
+        fontSize: 16,
+    },
 });
 
 export default Metric;
